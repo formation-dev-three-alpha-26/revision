@@ -7,6 +7,9 @@ export const add = createAsyncThunk(
   async (plantId, { dispatch, rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
+      if (!token) {
+        return rejectWithValue(null);
+      }
       const response = await axios.post(
         "http://localhost:3000/api/cart/add",
         plantId,
@@ -28,7 +31,9 @@ export const getCart = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
-
+      if (!token) {
+        return rejectWithValue(null);
+      }
       const response = await axios.get("http://localhost:3000/api/cart", {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -46,6 +51,9 @@ export const deletePlant = createAsyncThunk(
   async (plantId, { dispatch, rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
+      if (!token) {
+        return rejectWithValue(null);
+      }
       const response = await axios.delete(
         `http://localhost:3000/api/cart/${plantId}`,
 
@@ -66,6 +74,9 @@ export const updatePlant = createAsyncThunk(
   async ({ id, quantity }, { dispatch, rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
+      if (!token) {
+        return rejectWithValue(null);
+      }
       const response = await axios.put(
         `http://localhost:3000/api/cart/${id}`,
         { quantity: quantity },
@@ -97,31 +108,30 @@ const cartSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getCart.fulfilled, (state, action) => {
-        console.log(action.payload);
         state.error = null;
         state.data = action.payload;
       })
       .addCase(getCart.rejected, (state, action) => {
         state.error = action.payload;
       })
-        .addCase(add.fulfilled, (state, action) => {
-        state.error = null
+      .addCase(add.fulfilled, (state, action) => {
+        state.error = null;
       })
       .addCase(add.rejected, (state, action) => {
         state.error = action.payload;
       })
-        .addCase(deletePlant.fulfilled, (state, action) => {
-        state.error = null
+      .addCase(deletePlant.fulfilled, (state, action) => {
+        state.error = null;
       })
       .addCase(deletePlant.rejected, (state, action) => {
         state.error = action.payload;
       })
-       .addCase(updatePlant.fulfilled, (state, action) => {
-        state.error = null
+      .addCase(updatePlant.fulfilled, (state, action) => {
+        state.error = null;
       })
-       .addCase(updatePlant.rejected, (state, action) => {
+      .addCase(updatePlant.rejected, (state, action) => {
         state.error = action.payload;
-      })
+      });
   },
 });
 export const { clearCart } = cartSlice.actions;

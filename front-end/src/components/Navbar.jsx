@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from "react-redux";
 const Navbar = ({ onCartClick }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.users.user);
-  console.log(user);
   const logoutuser = () => {
     dispatch(clearCart());
     dispatch(logout());

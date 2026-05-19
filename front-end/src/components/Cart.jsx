@@ -8,7 +8,6 @@ const Cart = ({ open, onClose }) => {
     dispatch(getCart());
   }, []);
   const cartdata = useSelector((state) => state.carts.data);
-  console.log(cartdata);
   const total = () => {
     let result = 0;
 
@@ -61,7 +60,7 @@ const Cart = ({ open, onClose }) => {
                   </button>
                   <button
                     onClick={() => {
-                      dispatch(deletPlant(el.Plant.id));
+                      deletPlant(el.Plant.id)
                     }}
                   >
                     <Trash size={16} />
