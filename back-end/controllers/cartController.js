@@ -27,6 +27,11 @@ const addToCart = async (req, res) => {
   }
 };
 
+
+
+
+
+
 const getCart = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -44,6 +49,8 @@ const getCart = async (req, res) => {
   }
 };
 
+
+
 const removeFromCart = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -53,6 +60,10 @@ const removeFromCart = async (req, res) => {
     res.status(500).json({ message: "error " });
   }
 };
+
+
+
+
 const updateQuantity = async (req, res) => {
   try {
     const userId = req.user.id;

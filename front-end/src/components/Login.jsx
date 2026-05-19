@@ -1,22 +1,55 @@
+import { useState } from "react";
+import { LoginUser } from "../redux/userSlice";
+import { useDispatch  , useSelector} from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+
 const Login = () => {
+  const [email, setemail] = useState("");
+  const [password, setpassword] = useState("");
+  const dispatch = useDispatch();
+  const nav = useNavigate();
+  const { error } = useSelector((state) => state.users);
+
+  const create = async (e) => {
+    e.preventDefault();
+
+    let result = await dispatch(
+      LoginUser({
+        email: email,
+        password: password,
+      }),
+    );
+    if (!result.error) {
+      nav("/");
+    }
+  };
   return (
     <div className="auth-container">
       <div className="auth-card">
         <h1>Welcome Back</h1>
         <p className="auth-subtitle">Sign in to your account</p>
 
-        {/* staamlha pour lerror message */}
-
-        {/* {<div className="error-message"></div>} */} 
-        <form className="auth-form">
+        {error ? <div className="error-message"> {error}</div> : null}
+        <form className="auth-form" onSubmit={create}>
           <div className="form-group">
             <label htmlFor="email">Email</label>
-            <input id="email" type="email" placeholder="email" />
+            <input
+              id="email"
+              type="email"
+              placeholder="email"
+              onChange={(e) => setemail(e.target.value)}
+            />
           </div>
 
           <div className="form-group">
             <label htmlFor="password">Password</label>
-            <input id="password" type="password" placeholder="••••••••" />
+            <input
+              id="password"
+              type="password"
+              placeholder="••••••••"
+              onChange={(e) => setpassword(e.target.value)}
+            />
           </div>
 
           <button type="submit" className="auth-submit">
@@ -24,7 +57,7 @@ const Login = () => {
           </button>
         </form>
         <p className="auth-link">
-          Don't have an account? <a href="/register">Create one</a>
+          Don't have an account?  <Link to= {"/register"}>Create one</Link>
         </p>
       </div>
     </div>

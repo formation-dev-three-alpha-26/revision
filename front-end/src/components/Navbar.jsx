@@ -1,8 +1,27 @@
 import { Link } from "react-router-dom";
 import Search from "./Search";
+import { LogOut } from "lucide-react";
+import { logout } from "../redux/userSlice";
 import { ShoppingCart } from "lucide-react";
+import { clearCart } from "../redux/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
+const Navbar = ({ onCartClick }) => {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.users.user);
+  console.log(user);
+  const logoutuser = () => {
+    dispatch(clearCart());
+    dispatch(logout());
+  };
+  const cartN = useSelector((state) => {
+    let n = 0;
+    state.carts.data?.forEach((element) => {
+      n += element.quantity;
+    });
 
-const Navbar = ({onCartClick }) => {
+    return n;
+  });
+
   return (
     <header className="navbar">
       <Link className="brand" to="/">
@@ -13,7 +32,36 @@ const Navbar = ({onCartClick }) => {
         <Link to="/collections">Collections</Link>
       </nav>
       <Search />
-       <ShoppingCart size={20} onClick={onCartClick} />
+
+      <div className="nav-actions">
+        {user ? (
+          <div className="nav-user">
+            <span> {user.username} </span>
+            <button
+              type="button"
+              className="logout-button"
+              aria-label="Logout"
+              onClick={() => logoutuser()}
+            >
+              <LogOut size={18} />
+            </button>
+          </div>
+        ) : (
+          <Link className="login-link" to="/login">
+            Login
+          </Link>
+        )}
+
+        <button
+          type="button"
+          className="cart-button"
+          onClick={onCartClick}
+          aria-label="Open cart"
+        >
+          <ShoppingCart size={20} />
+          {cartN > 0 ? <span className="cart-count"> {cartN} </span> : null}
+        </button>
+      </div>
     </header>
   );
 };
